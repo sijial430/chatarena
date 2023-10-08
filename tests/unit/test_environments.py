@@ -2,7 +2,7 @@ import unittest
 from unittest import TestCase
 
 from chatarena.environments import (
-    PettingzooTicTacToe
+    PettingzooTicTacToe, Avalon
 )
 
 
@@ -24,6 +24,11 @@ class TestEnvironments(TestCase):
             print(timestep.terminal)
             env.print()
 
+    def test_avalon_environment(self):
+        player_names = ["Merlin", "Percival", "Morgana", "Assassin", "Servant"]
+        env = Avalon(player_names)
+
+        env.reset()
 
 if __name__ == "__main__":
     unittest.main()

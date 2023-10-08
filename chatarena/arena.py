@@ -107,6 +107,7 @@ class Arena:
             if global_prompt is not None:
                 player_config["global_prompt"] = global_prompt
 
+            print(player_config)
             player = Player.from_config(player_config)
             players.append(player)
 

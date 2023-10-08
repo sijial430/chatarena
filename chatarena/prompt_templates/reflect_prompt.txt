@@ -1,0 +1,3 @@
+Now it is the {t}-th {team_building_or_quest}. Assuming you are {player_i}, the {role}, what insights can you summarize with few sentences based on the above conversations and {Ati} in heart for helping continue the talking and achieving your objective? 
+
+Example: As the {role}, I observed that... I think that... But I am... So, ...

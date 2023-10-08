@@ -1,0 +1,22 @@
+Your output should be format in a json with the following schema:
+```
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "price": {
+      "description": "your proposed price",
+      "type": "number"
+    },
+    "arguments": {
+      "description": "what you are going to say to your opponent",
+      "type": "string"
+    }
+  },
+  "required": ["price", "arguments"]
+}
+```
+For example:
+```
+{\n  "price": 50,\n  "arguments": "I believe a price of $50 is fair for both parties. It takes into account the quality of the item and the current market value." \n}
+```

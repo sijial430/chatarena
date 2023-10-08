@@ -7,11 +7,12 @@ from chatarena.message import Message
 
 # set logger level to info
 logging.basicConfig(level=logging.INFO)
-
+default_model = "facebook/blenderbot-400M-distill"
+model = "lmsys/vicuna-33b-v1.3"
 
 class TestHFTransformers(TestCase):
     def test_transformers_conv_1(self):
-        backend = TransformersConversational(model="facebook/blenderbot-400M-distill", device=-1)
+        backend = TransformersConversational(model=default_model, device=-1)
 
         history_messages = [
             Message(agent_name="User",
@@ -25,7 +26,7 @@ class TestHFTransformers(TestCase):
         self.assertTrue(True)
 
     def test_transformers_conv_2(self):
-        backend = TransformersConversational(model="facebook/blenderbot-400M-distill", device=-1)
+        backend = TransformersConversational(model=default_model, device=-1)
 
         history_messages = [
             Message(agent_name="User",
@@ -33,7 +34,7 @@ class TestHFTransformers(TestCase):
             Message(agent_name="Chatbot",
                     content="Sure, what kind of pasta do you like? I like spaghetti and meatballs.", turn=2),
             Message(agent_name="User",
-                    content="I like Bucatini better. Could you suggest a recipe?", turn=3),
+                    content="I like Bucatiini better. Could you suggest a recipe?", turn=3),
         ]
 
         response = backend.query(agent_name="Chatbot", history_messages=history_messages,

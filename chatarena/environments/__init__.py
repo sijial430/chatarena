@@ -3,6 +3,7 @@ from .conversation import Conversation, ModeratedConversation
 from .chameleon import Chameleon
 from .pettingzoo_chess import PettingzooChess
 from .pettingzoo_tictactoe import PettingzooTicTacToe
+from .avalon import Avalon
 
 from ..config import EnvironmentConfig
 
@@ -12,6 +13,7 @@ ALL_ENVIRONMENTS = [
     Chameleon,
     PettingzooChess,
     PettingzooTicTacToe,
+    Avalon
 ]
 
 ENV_REGISTRY = {env.type_name: env for env in ALL_ENVIRONMENTS}

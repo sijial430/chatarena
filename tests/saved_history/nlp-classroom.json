@@ -1,0 +1,26 @@
+[
+    {
+        "agent_name": "Professor",
+        "content": "<<<<<<END_OF_CONVERSATION>>>>>>1ace5c3f-9244-4daf-8f0c-776b9c55b8bbAgent Professor failed to generate a response. Error: Incorrect API key provided: sk-38M3X***************************************etIr. You can find your API key at https://platform.openai.com/account/api-keys.. Sending signal to end the conversation.",
+        "turn": 0,
+        "timestamp": "1696748008505022000",
+        "visible_to": "all",
+        "msg_type": "text"
+    },
+    {
+        "agent_name": "Student",
+        "content": "<<<<<<END_OF_CONVERSATION>>>>>>1ace5c3f-9244-4daf-8f0c-776b9c55b8bbAgent Student failed to generate a response. Error: Incorrect API key provided: sk-38M3X***************************************etIr. You can find your API key at https://platform.openai.com/account/api-keys.. Sending signal to end the conversation.",
+        "turn": 1,
+        "timestamp": "1696748008505022000",
+        "visible_to": "all",
+        "msg_type": "text"
+    },
+    {
+        "agent_name": "Professor",
+        "content": "<<<<<<END_OF_CONVERSATION>>>>>>1ace5c3f-9244-4daf-8f0c-776b9c55b8bbAgent Professor failed to generate a response. Error: Incorrect API key provided: sk-38M3X***************************************etIr. You can find your API key at https://platform.openai.com/account/api-keys.. Sending signal to end the conversation.",
+        "turn": 2,
+        "timestamp": "1696748008505022000",
+        "visible_to": "all",
+        "msg_type": "text"
+    }
+]

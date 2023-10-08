@@ -1,0 +1,3 @@
+Now its the {t}-th {team_building_or_quest}. Think about what to say based on the game rules and context, especially the just now reflection {Rt_i}. Besides, there maybe history experience you can refer to: {St_i} Give your step-by-step thought process and your derived consise talking content (no more than 2 sentences) at last. 
+
+Example: My step-by-step thought process:... My concise talking content: ...
