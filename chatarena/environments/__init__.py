@@ -1,18 +1,18 @@
-from .base import Environment, TimeStep
-from .conversation import Conversation, ModeratedConversation
-from .chameleon import Chameleon
-from .pettingzoo_chess import PettingzooChess
-from .pettingzoo_tictactoe import PettingzooTicTacToe
-from .avalon import Avalon
+from chatarena.environments.base import Environment, TimeStep
+#from chatarena.environments.conversation import Conversation, ModeratedConversation
+from chatarena.environments.chameleon import Chameleon
+#from chatarena.environments.pettingzoo_chess import PettingzooChess
+#from chatarena.environments.pettingzoo_tictactoe import PettingzooTicTacToe
+from chatarena.environments.avalon import Avalon
 
-from ..config import EnvironmentConfig
+from chatarena.config import EnvironmentConfig
 
 ALL_ENVIRONMENTS = [
-    Conversation,
-    ModeratedConversation,
+    #Conversation,
+    #ModeratedConversation,
     Chameleon,
-    PettingzooChess,
-    PettingzooTicTacToe,
+    #PettingzooChess,
+    #PettingzooTicTacToe,
     Avalon
 ]
 

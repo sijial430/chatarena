@@ -9,6 +9,9 @@ from .environments import Environment, TimeStep, load_environment
 from .backends import Human
 from .config import ArenaConfig
 
+import pdb
+import time
+
 
 class TooManyInvalidActions(Exception):
     pass
@@ -22,6 +25,8 @@ class Arena:
     def __init__(self, players: List[Player], environment: Environment, global_prompt: str = None):
         # Create a container for the players and environment and reset the game
         self.players = players
+        self.player_names = [x.name for x in players]
+        self.anonymous_player_names = [f"Player {i}" for i in range(len(players))]
         self.environment = environment
         self.global_prompt = global_prompt
 
@@ -51,24 +56,36 @@ class Arena:
         """
         Take a step in the game: one player takes an action and the environment updates
         """
-        player_name = self.environment.get_next_player()
-        player = self.name_to_player[player_name]  # get the player object
-        observation = self.environment.get_observation(player_name)  # get the observation for the player
+        player_idx = self.environment._get_next_player()
+        #print(player_idx)
+        #pdb.set_trace()
+        player = self.name_to_player[self.player_names[player_idx]]  # get the player object
+        observation = self.environment._get_observation(self.anonymous_player_names[player_idx])  # get the observation for the player
 
         timestep = None
         for i in range(self.invalid_actions_retry):  # try to take an action for a few times
-            action = player(observation)  # take an action
-            if self.environment.check_action(action, player_name):  # action is valid
-                timestep = self.environment.step(player_name, action)  # update the environment
+            try:
+                action = player(observation)  # take an action
+            except:
+                time.sleep(5)
+                print('RETRYING')
+                action = player(observation)
+            if self.environment.check_action(action, self.anonymous_player_names[player_idx]):  # action is valid
+                try:
+                    timestep = self.environment.step(self.anonymous_player_names[player_idx], action)  # update the environment
+                except:
+                    pdb.set_trace()
                 break
             else:  # action is invalid
-                logging.warning(f"{player_name} made an invalid action {action}")
+                logging.warning(f"{self.anonymous_player_names[player_idx]} made an invalid action {action}")
                 continue
 
         if timestep is None:  # if the player made invalid actions for too many times, terminate the game
-            warning_msg = f"{player_name} has made invalid actions for {self.invalid_actions_retry} times. Terminating the game."
+            warning_msg = f"{self.anonymous_player_names[player_idx]} has made invalid actions for {self.invalid_actions_retry} times. Terminating the game."
             logging.warning(warning_msg)
             raise TooManyInvalidActions(warning_msg)
+
+        #pdb.set_trace()
 
         return timestep
 
@@ -76,8 +93,8 @@ class Arena:
         """
         check if the next player is human
         """
-        player_name = self.environment.get_next_player()
-        player = self.name_to_player[player_name]
+        player_idx = self.environment._get_next_player()
+        player = self.name_to_player[self.player_names[player_idx]]
         return isinstance(player.backend, Human)
 
     def run(self, num_steps: int = 1):
@@ -156,7 +173,7 @@ class Arena:
         save the history of the game to a file
         Supports csv and json formats.
         """
-        messages = self.environment.get_observation()
+        messages = self.environment._get_observation()
         message_rows = []
 
         if path.endswith(".csv"):

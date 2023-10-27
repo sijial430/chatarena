@@ -26,12 +26,12 @@ class IntelligenceBackend(Configurable):
         return BackendConfig(**self._config_dict)
 
     @abstractmethod
-    def query(self, agent_name: str, role_desc: str, history_messages: List[Message], global_prompt: str = None,
+    def query(self, agent_name: str, role: str, role_desc: str, history_messages: List[Message], global_prompt: str = None,
               request_msg: Message = None, *args, **kwargs) -> str:
         raise NotImplementedError
 
     @abstractmethod
-    async def async_query(self, agent_name: str, role_desc: str, history_messages: List[Message],
+    async def async_query(self, agent_name: str, role: str, role_desc: str, history_messages: List[Message],
                           global_prompt: str = None, request_msg: Message = None, *args, **kwargs) -> str:
         """Async querying"""
         raise NotImplementedError

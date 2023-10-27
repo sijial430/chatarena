@@ -21,7 +21,7 @@ _________  .__               __      _____
 visible_colors = [color for color in ANSI_COLOR_NAMES.keys() if
                   color not in ["black", "white", "red", "green"] and "grey" not in color]
 
-MAX_STEPS = 5
+MAX_STEPS = 50
 
 import logging
 
@@ -56,7 +56,9 @@ class ArenaCLI:
         env_desc = self.arena.global_prompt
         num_players = env.num_players
         player_colors = random.sample(visible_colors, num_players)  # sample different colors for players
-        name_to_color = dict(zip(env.player_names, player_colors))
+        print(env.anonymous_player_names)
+        name_to_color = dict(zip(env.anonymous_player_names, player_colors))
+        print(name_to_color)
         # System and Moderator messages are printed in red
         name_to_color["System"] = "red"
         name_to_color["Moderator"] = "red"
@@ -114,7 +116,7 @@ class ArenaCLI:
                 timestep = self.arena.step()
             except HumanBackendError as e:
                 # Handle human input and recover with the game update
-                human_player_name = env.get_next_player()
+                human_player_name = env._get_next_player()
                 if interactive:
                     human_input = prompt(
                         [('class:user_prompt', f"Type your input for {human_player_name}: ")],
@@ -126,11 +128,12 @@ class ArenaCLI:
                     raise e  # cannot recover from this error in non-interactive mode
             except TooManyInvalidActions as e:
                 # Print the error message
+                print(self.environment.current_phase, self.environment.current_player_idx, self.environment.action)
                 console.print(f"Too many invalid actions: {e}", style="bold red")
                 break
 
             # The messages that are not yet logged
-            messages = [msg for msg in env.get_observation() if not msg.logged]
+            messages = [msg for msg in env._get_observation() if not msg.logged]
             # Print the new messages
             for msg in messages:
                 message_text = Text(f"[{msg.agent_name}->{msg.visible_to}]: {msg.content}")
