@@ -83,12 +83,12 @@ class OpenAIChat(IntelligenceBackend):
             history_messages: the history of the conversation, or the observation for the agent
             request_msg: the request from the system to guide the agent's next response
         """
-
         # Merge the role description and the global prompt as the system prompt for the agent
         if global_prompt:  # Prepend the global prompt if it exists
             system_prompt = f"{global_prompt.strip()}\n{BASE_PROMPT}\n\nYour name is {agent_name}.\n\nYour role is {role}.\n\n{role_desc}"
         else:
-            system_prompt = f"Your name is {agent_name}.\n\nYour role is {role}.\n\n{role_desc}\n\n{BASE_PROMPT}"
+            #system_prompt = f"Your name is {agent_name}.\n\nYour role is {role}.\n\n{role_desc}\n\n{BASE_PROMPT}"
+            system_prompt = f"{role_desc}\n\n{BASE_PROMPT}"
 
         all_messages = [(SYSTEM_NAME, system_prompt)]
         for msg in history_messages:
@@ -104,7 +104,6 @@ class OpenAIChat(IntelligenceBackend):
 
         messages = []
         for i, msg in enumerate(all_messages):
-            pdb.set_trace()
             if i == 0:
                 assert msg[0] == SYSTEM_NAME  # The first message should be from the system
                 messages.append({"role": "system", "content": msg[1]})
