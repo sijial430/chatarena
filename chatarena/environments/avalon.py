@@ -77,7 +77,7 @@ class Avalon(Environment):
                 evil_ids.append(i)
             if name in ["Mordred", "Morgana", "Assassin", "Oberon"]:
                 merlin_ids.append(i)
-            if name in ["Merlin", "Percival"]:
+            if name in ["Merlin", "Morgana"]:
                 percival_ids.append(i)
         return {"evil": evil_ids, 
                 "merlin": merlin_ids, 
@@ -125,14 +125,30 @@ class Avalon(Environment):
         self._merlin_idx = [i for i, x in enumerate(self.player_names) if x == "Merlin"][0]
         self._percival_idx = [i for i, x in enumerate(self.player_names) if x == "Percival"][0]
 
-        self._moderator_speak(f"For this game, we have {self.num_players} players. Now, all players close your eyes.")
-        self._moderator_speak(f"Minions of Mordred, these players {player_info['evil']} are all agents of Evil.", visible_to=["Morgana", "Assassin"])
-        self._moderator_speak(f"Merlin, these players {player_info['merlin']} are the agents of Evil.", visible_to="Merlin")
-        self._moderator_speak(f"Percival, these two players {player_info['percival']} are either Merlin or Morgana.", visible_to="Percival")
+        self._moderator_speak(f"This game will consist of {self.num_players} players. I will now privately reveal your roles, and provide you with any additional information according to your role.")
+
+
+        for i,x in enumerate(self.player_names):
+            mod_text = f"Player {i}, your role is {x}."
+            if x == 'Morgana' or x == 'Assassin':
+                evil_text = [f"Player {d}" for d in  player_info['evil']]
+                mod_text += f" There are two agents of Evil (including you): {evil_text}."
+            elif x == "Merlin":
+                evil_text = [f"Player {d}" for d in  player_info['evil']]
+                mod_text += f" There are two agents of Evil: {evil_text}. As Merlin, you must be careful about revealing your identity. If the Assassin can correctly guess you to be Merlin, you will lose the game."
+            elif x == "Percival":
+                percival_text = "Player {0} and Player {1}".format(player_info['percival'][0], player_info['percival'][1])
+                mod_text += f" As Percival, your job is to identify Merlin and carefully support him. Of the following players, one is Morgana (pretending to be Merlin) and the other is Merlin: {percival_text}"
+            self._moderator_speak(mod_text, visible_to=f"Player {i}")
+            print(i, mod_text)
+        #self._moderator_speak(f"Minions of Mordred, these players {player_info['evil']} are all agents of Evil.", visible_to=["Morgana", "Assassin"])
+        #self._moderator_speak(f"Merlin, these players {player_info['merlin']} are the agents of Evil.", visible_to="Merlin")
+        #self._moderator_speak(f"Percival, these two players {player_info['percival']} are either Merlin or Morgana.", visible_to="Percival")
         #self._moderator_speak(f"Minions of Mordred, these players [{player_info['evil']}] are all agents of Evil.", visible_to=player_info['evil'])
         #self._moderator_speak(f"Merlin, these players [{player_info['merlin']}] are the agents of Evil.", visible_to=self._merlin_idx)
         #self._moderator_speak(f"Percival, these two players [{player_info['percival']}] are either Merlin or Morgana", visible_to=self._percival_idx)
-        self._moderator_speak(f"All players open your eyes. The first leader is Player {self.current_leader_idx}. Player {self.current_leader_idx}, please propose a team for the first quest. This quest requires {self.quest_sizes[0]} players to finish. You can and should propose yourself as a member of the quest team unless there is a strong reason not to do so. All players, there will be three rounds of discussion before you vote for the proposed team. Please make sure to use the discussions wisely.") 
+        #self._moderator_speak(f"All players open your eyes. The first leader is Player {self.current_leader_idx}. Player {self.current_leader_idx}, please propose a team for the first quest. This quest requires {self.quest_sizes[0]} players to finish. You can and should propose yourself as a member of the quest team unless there is a strong reason not to do so. All players, there will be three rounds of discussion before you vote for the proposed team. Please make sure to use the discussions wisely.") 
+        self._moderator_speak(f"All players now know their roles and all necessary information. The first leader is Player {self.current_leader_idx}. Player {self.current_leader_idx}, please propose a team for the first quest. This quest requires {self.quest_sizes[0]} players to finish. You can and should propose yourself as a member of the quest team unless there is a strong reason not to do so. All players, there will be three rounds of discussion before you vote for the proposed team. Please make sure to use the discussions wisely.") 
         self.message_pool.print()
 
         # Get next player name

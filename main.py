@@ -39,7 +39,10 @@ def run_main():
     prompts = load_prompts(prompt_path)
 
     # create players
-    names = random.sample(PLAYER_NAMES, len(PLAYER_NAMES))
+    #names = random.sample(PLAYER_NAMES, len(PLAYER_NAMES))
+
+    names = ["Merlin", "Percival", "Servant of Arthur", "Assassin", "Morgana"]
+
     anonymous_names = [f"Player {i}" for i in range(len(PLAYER_NAMES))]
     #print(anonymous_names)
     print(f"{anonymous_name}: {name}" for anonymous_name, name in zip(anonymous_names, names))
@@ -47,15 +50,11 @@ def run_main():
     players = []
     for i in range(len(names)):
         #print(names[i])
-        role_i = prompts["environment_description"] + "\n\n" + \
-                    prompts["role_description"].format(player_i=i, role_i=names[i], num_other_players=len(PLAYER_NAMES)-1) # + \
-                    # prompts["format_specification"]
-        #print(role_i)
+        role_prompt = prompts['environment_description'].format(player_i=i, num_players=len(names))
         player_i = Player(name=anonymous_names[i],
                           role=names[i],
-                        role_desc=role_i,
-                        backend=OpenAIChat(model="gpt-3.5-turbo"))
-                        #backend=TransformersConversational(model="facebook/blenderbot-400M-distill"))
+                          role_desc=role_prompt,
+                          backend=OpenAIChat(model="gpt-3.5-turbo"))
         players.append(player_i)
     print(players)
     
