@@ -7,12 +7,9 @@ from chatarena.environments.avalon import Avalon
 
 import argparse
 import os
-
 import openai
 
-openai.api_key = "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"
-#openai.api_key = ""
-#print(openai.api_key)
+
 api_key = os.environ.get('OPENAI_API_KEY')
 print(api_key)
 # anthropic_api_key = os.environ.get('ANTHROPIC_API_KEY')
