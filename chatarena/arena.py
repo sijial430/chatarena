@@ -61,6 +61,9 @@ class Arena:
         #pdb.set_trace()
         player = self.name_to_player[self.player_names[player_idx]]  # get the player object
         observation = self.environment._get_observation(self.anonymous_player_names[player_idx])  # get the observation for the player
+        if len(observation) == 0:
+            self.environment.reset()
+            observation = [m for m in self.environment._get_observation() if m.visible_to == 'all' or self.anonymous_player_names[player_idx] in m.visible_to]  # get the observation for the player
 
         timestep = None
         for i in range(self.invalid_actions_retry):  # try to take an action for a few times
