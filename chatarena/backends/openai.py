@@ -6,6 +6,7 @@ from tenacity import retry, stop_after_attempt, wait_random_exponential
 
 from .base import IntelligenceBackend
 from ..message import Message, SYSTEM_NAME, MODERATOR_NAME
+import pdb
 
 try:
     import openai
@@ -85,9 +86,9 @@ class OpenAIChat(IntelligenceBackend):
 
         # Merge the role description and the global prompt as the system prompt for the agent
         if global_prompt:  # Prepend the global prompt if it exists
-            system_prompt = f"You are a helpful assistant.\n{global_prompt.strip()}\n{BASE_PROMPT}\n\nYour name is {agent_name}.\n\nYour role:{role_desc}"
+            system_prompt = f"{global_prompt.strip()}\n{BASE_PROMPT}\n\nYour name is {agent_name}.\n\nYour role is {role}.\n\n{role_desc}"
         else:
-            system_prompt = f"You are a helpful assistant. Your name is {agent_name}.\n\nYour role:{role_desc}\n\n{BASE_PROMPT}"
+            system_prompt = f"Your name is {agent_name}.\n\nYour role is {role}.\n\n{role_desc}\n\n{BASE_PROMPT}"
 
         all_messages = [(SYSTEM_NAME, system_prompt)]
         for msg in history_messages:
@@ -103,6 +104,7 @@ class OpenAIChat(IntelligenceBackend):
 
         messages = []
         for i, msg in enumerate(all_messages):
+            pdb.set_trace()
             if i == 0:
                 assert msg[0] == SYSTEM_NAME  # The first message should be from the system
                 messages.append({"role": "system", "content": msg[1]})
@@ -117,17 +119,18 @@ class OpenAIChat(IntelligenceBackend):
                             messages.append({"role": "user", "content": f"[{msg[0]}]: {msg[1]}"})
                     elif messages[-1]["role"] == "assistant":  # consecutive assistant messages
                         # Merge the assistant messages
-                        messages[-1]["content"] = f"{messages[-1]['content']}\n{msg[1]}"
+                        messages[-1]["content"] = f"{messages[-1]['content']}\n\n[{msg[0]}]: {msg[1]}"
                     elif messages[-1]["role"] == "system":
                         messages.append({"role": "user", "content": f"[{msg[0]}]: {msg[1]}"})
                     else:
                         raise ValueError(f"Invalid role: {messages[-1]['role']}")
 
+        pdb.set_trace()
         response = self._get_response(messages, *args, **kwargs)
 
         # Remove the agent name if the response starts with it
-        response = re.sub(rf"^\s*\[.*]:", "", response).strip()
-        response = re.sub(rf"^\s*{re.escape(agent_name)}\s*:", "", response).strip()
+        #response = re.sub(rf"^\s*\[.*]:", "", response).strip()
+        #response = re.sub(rf"^\s*{re.escape(agent_name)}\s*:", "", response).strip()
 
         # Remove the tailing end of message token
         response = re.sub(rf"{END_OF_MESSAGE}$", "", response).strip()
