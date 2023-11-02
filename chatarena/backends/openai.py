@@ -73,7 +73,7 @@ class OpenAIChat(IntelligenceBackend):
         return response
 
     def query(self, agent_name: str, role: str, role_desc: str, history_messages: List[Message], global_prompt: str = None,
-              request_msg: Message = None, *args, **kwargs) -> str:
+            request_msg: Message = None, thought_msgs: List[Message] = None, *args, **kwargs) -> str:
         """
         format the input and call the ChatGPT/GPT-4 API
         args:
@@ -97,8 +97,18 @@ class OpenAIChat(IntelligenceBackend):
             else:  # non-system messages are suffixed with the end of message token
                 all_messages.append((msg.agent_name, f"{msg.content}{END_OF_MESSAGE}"))
 
-        if request_msg:
-            all_messages.append((SYSTEM_NAME, request_msg.content))
+        if thought_msgs is not None and len(thought_msgs) > 0:
+            for i,thought in enumerate(thought_msgs):
+                if i % 2 == 0:
+                    all_messages.append(('InternalQuestion', thought))
+                else:
+                    all_messages.append((agent_name, thought))
+
+        elif request_msg:
+            if type(request_msg) is str:
+                all_messages.append((SYSTEM_NAME, request_msg))
+            else:
+                all_messages.append((SYSTEM_NAME, request_msg.content))
         else:  # The default request message that reminds the agent its role and instruct it to speak
             all_messages.append((SYSTEM_NAME, f"Now you speak, {agent_name}.{END_OF_MESSAGE}"))
 
@@ -118,13 +128,14 @@ class OpenAIChat(IntelligenceBackend):
                             messages.append({"role": "user", "content": f"[{msg[0]}]: {msg[1]}"})
                     elif messages[-1]["role"] == "assistant":  # consecutive assistant messages
                         # Merge the assistant messages
-                        messages[-1]["content"] = f"{messages[-1]['content']}\n\n[{msg[0]}]: {msg[1]}"
+                        #messages[-1]["content"] = f"{messages[-1]['content']}\n\n[{msg[0]}]: {msg[1]}"
+                        messages.append({"role": "user", "content": f"[{msg[0]}]: {msg[1]}"})
                     elif messages[-1]["role"] == "system":
                         messages.append({"role": "user", "content": f"[{msg[0]}]: {msg[1]}"})
                     else:
                         raise ValueError(f"Invalid role: {messages[-1]['role']}")
 
-        pdb.set_trace()
+        #pdb.set_trace()
         response = self._get_response(messages, *args, **kwargs)
 
         # Remove the agent name if the response starts with it

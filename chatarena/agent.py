@@ -35,7 +35,6 @@ class Agent(Configurable):
         self.role_desc = role_desc
         self.global_prompt = global_prompt
 
-
 class Player(Agent):
     """
     The Player class represents a player in the chatArena environment. A player can observe the environment
@@ -89,10 +88,55 @@ class Player(Agent):
         Returns:
             str: The action (response) of the player.
         """
+        return self.act_multistep(observation)
+
         try:
+            request_message = f"Now you speak, {self.name}. Carefully consider your role, the roles of the other players, your objectives for this round and for the entire game, and the opinions of the other players. Craft your response to maximize the changes of convincing the other players to go with your plan, to ensure your goals are achieved and your team wins the game.<EOS>"
             response = self.backend.query(agent_name=self.name, role=self.role, role_desc=self.role_desc,
                                           history_messages=observation, global_prompt=self.global_prompt,
-                                          request_msg=None)
+                                          request_msg=request_message)
+        except RetryError as e:
+            err_msg = f"Agent {self.role} failed to generate a response. Error: {e.last_attempt.exception()}. Sending signal to end the conversation."
+            logging.warning(err_msg)
+            response = SIGNAL_END_OF_CONVERSATION + err_msg
+
+        return response
+
+    def act_multistep(self, observation):
+        try:
+            thought_msg1 = f"What is the state of the game? Make sure your answer touches on the other players' roles, thoughts and plans."
+            thought_msg2 = f"What is your objective in this round? Consider your role, the game state, and your chances of winning the game."
+            thought_msg3 = f"How can you achieve your objective for this round?"
+            thought_msg4 = f"Craft a message to send to the other players. Ensure your responses helps move forward the game according to your objectives. Ensure not to reveal too much in your message."
+            thought_msg5 = f"Now consider your strategy and objective, and revise your message. If your message is too long or says anything about your identity, ensure to fix it."
+
+            thought_msg_list1 = [thought_msg1]
+            response1 = self.backend.query(agent_name=self.name, role=self.role, role_desc=self.role_desc,
+                                          history_messages=observation, global_prompt=self.global_prompt,
+                                          request_msg=None, thought_msgs=thought_msg_list1)
+
+            thought_msg_list2 = [thought_msg1, response1, thought_msg2]
+            response2 = self.backend.query(agent_name=self.name, role=self.role, role_desc=self.role_desc,
+                                          history_messages=observation, global_prompt=self.global_prompt,
+                                          request_msg=None, thought_msgs=thought_msg_list2)
+
+            thought_msg_list3 = [thought_msg1, response1, thought_msg2, response2, thought_msg3]
+            response3 = self.backend.query(agent_name=self.name, role=self.role, role_desc=self.role_desc,
+                                          history_messages=observation, global_prompt=self.global_prompt,
+                                          request_msg=None, thought_msgs=thought_msg_list3)
+
+            thought_msg_list4 = [thought_msg1, response1, thought_msg2, response2, thought_msg3, response3, thought_msg4]
+            response4 = self.backend.query(agent_name=self.name, role=self.role, role_desc=self.role_desc,
+                                          history_messages=observation, global_prompt=self.global_prompt,
+                                          request_msg=None, thought_msgs=thought_msg_list4)
+
+            thought_msg_list5 = [thought_msg1, response1, thought_msg2, response2, thought_msg3, response3, thought_msg4, response4, thought_msg5]
+            response5 = self.backend.query(agent_name=self.name, role=self.role, role_desc=self.role_desc,
+                                          history_messages=observation, global_prompt=self.global_prompt,
+                                          request_msg=None, thought_msgs=thought_msg_list5)
+            print('\n'.join(thought_msg_list5))
+            print(response5)
+            response = response5
         except RetryError as e:
             err_msg = f"Agent {self.role} failed to generate a response. Error: {e.last_attempt.exception()}. Sending signal to end the conversation."
             logging.warning(err_msg)
