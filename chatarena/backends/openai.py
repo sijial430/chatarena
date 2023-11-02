@@ -104,7 +104,6 @@ class OpenAIChat(IntelligenceBackend):
 
         messages = []
         for i, msg in enumerate(all_messages):
-            pdb.set_trace()
             if i == 0:
                 assert msg[0] == SYSTEM_NAME  # The first message should be from the system
                 messages.append({"role": "system", "content": msg[1]})
@@ -124,15 +123,15 @@ class OpenAIChat(IntelligenceBackend):
                         messages.append({"role": "user", "content": f"[{msg[0]}]: {msg[1]}"})
                     else:
                         raise ValueError(f"Invalid role: {messages[-1]['role']}")
-
-        pdb.set_trace()
+                    
         response = self._get_response(messages, *args, **kwargs)
 
         # Remove the agent name if the response starts with it
-        #response = re.sub(rf"^\s*\[.*]:", "", response).strip()
-        #response = re.sub(rf"^\s*{re.escape(agent_name)}\s*:", "", response).strip()
+        response = re.sub(rf"^\s*\[.*]:", "", response).strip()
+        response = re.sub(rf"^\s*{re.escape(agent_name)}\s*:", "", response).strip()
 
         # Remove the tailing end of message token
         response = re.sub(rf"{END_OF_MESSAGE}$", "", response).strip()
+        pdb.set_trace()
 
         return response
