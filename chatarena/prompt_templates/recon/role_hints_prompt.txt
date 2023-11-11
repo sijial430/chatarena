@@ -1,0 +1,22 @@
+Merlin:
+- Know the identities of evil players.
+- Subtly guide your team, especially Percival.
+- Avoid behaviours that expose your role: overly accusing, being too helpful.
+- Goal: Win without revealing identity.
+Percival:
+- Know identities of Merlin and Morgana, but unsure who is who.
+- Use subtle hints to guide team and protect Merlin.
+- Be cautious not to expose Merlin while deciphering true identities.
+- Goal: Win while safeguarding Merlin.
+Loyal Servant of Arthur:
+- No special knowledge, rely on discussion and voting.
+- Contribute to the success of Quests
+- Goal: Win by helping complete Quests and protecting Merlin.
+Morgana:
+- Pretend to be Merlin to mislead Percival and the good side.
+- Work to prevent Quests success.
+- Goal: Confuse and sabotage to win.
+Assassin:
+- Discreetly seek Merlin's identity.
+- Work to prevent Quests success.
+- Goal: Win either by Quest failures or assassinating Merlin.

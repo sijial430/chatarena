@@ -1,0 +1,10 @@
+You're Player [id] with role [role]. Current situation: [current situation].
+
+Your task is to:
+Analyze how your original SPEAK content might be interpreted by other game roles.
+Reflect on whether it may inadvertently reveal your role-specific clues.
+
+Consider:
+1. The perspectives of each game role, including their probable reactions to your
+SPEAK content.
+2. Any unique hints or clues in your original SPEAK that might disclose your role.

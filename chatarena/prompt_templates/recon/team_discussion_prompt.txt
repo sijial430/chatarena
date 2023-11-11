@@ -1,0 +1,17 @@
+Contemplation (Private):
+You're Player [id] with role [role]. Current situation: [current situation].
+
+Your task is to:
+Discuss proposed team: [current proposed team players]. Reflect on game history and received hints.
+
+Consider:
+1. Assess each player's involvement and actions so far.
+2. Review how players have contributed to past Quests.
+3. Evaluate any behavior that appears either suspicious or trustworthy.
+
+Speaking (Public):
+Evaluate team [proposed team players]. Provide concise, reasoned analysis based on game history and behavior. Do not reveal your role or hint unless you want to.
+
+Remember:
+If you are on the good team, aim for a good team without evil player.
+If you are on the evil team, include one, ideally only one, evil player.

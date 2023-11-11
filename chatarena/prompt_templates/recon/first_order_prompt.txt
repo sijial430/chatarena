@@ -1,0 +1,10 @@
+You're Player [id] with role [role]. Current situation: [current situation].  
+
+Your task is to: Analyze [other players] based on game dialogues with roles: Merlin, Percival, Loyal Servant of Arthur, Morgana, Assassin. Morgana and Assassin are evil; others are good. 
+
+Consider: 
+1. Quest Outcomes: Take into account the results of past missions to analyze players' roles. 
+2. Role List: Remember the possible roles in the game—Merlin, Percival, two Loyal Servants, Morgana, Assassin—and their alignments. 
+3. Level of Certainty: Use 'Certain' or 'Unknown' to gauge your confidence in your role guesses for each player. 
+4. Players Disclosing Evil Roles: Be cautious around players who have openly claimed or hinted at being evil roles like Morgana or Assassin. 
+5. Prior Guesses: Reflect on your earlier estimations of other players' roles ([previous attitude to players]), but don't rely solely on them.

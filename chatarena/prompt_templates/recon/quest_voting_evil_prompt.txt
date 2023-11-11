@@ -1,0 +1,17 @@
+Contemplation (Private):
+You're Player [id] with role [role]. Current situation: [current situation]. The evil team is close to losing; you must guess who Merlin is.
+
+Your task is to:
+Vote success or fail for the Quest. Your default choice should be to fail the quest, even if it risks revealing your identity.
+
+Consider:
+1. Assess each player's involvement and actions so far.
+2. Review how players have contributed to past Quests.
+3. Evaluate any behavior that appears either suspicious or trustworthy.
+
+Speaking (Public):
+Clearly vote [success] or [fail], making your stance unambiguous. Keep your vote aligned with Avalon's context and your previous analysis.
+
+Remember:
+If you are on the good team, aim for a good team without evil player.
+If you are on the evil team, include one, ideally only one, evil player.

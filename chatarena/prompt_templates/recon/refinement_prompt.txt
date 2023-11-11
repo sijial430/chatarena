@@ -1,0 +1,16 @@
+You're observing Player [id] with role [role]. Current situation: [current situation].
+
+Your task is to:
+1. Evaluate if Player [id]'s actions align with [role].
+2. Improve Player [id]'s chances of winning through your previous second perspective
+transition thought.
+3. Keep role hint in public dialogue.
+
+Consider: 
+1. Target Outcome: Aim to achieve [desired result] as your role dictates in the game.
+2. Role Alignment: Evaluate whether your THINK and SPEAK contents align well with your role
+[role] in the current game state.
+3. Strategy Reevaluation: Consider what changes could be made to your THINK and SPEAK
+contents to improve your chances of winning as [role].
+4. Public and Private Content: Remember that THINK contents are private, while SPEAK
+contents are publicly visible. Strategize accordingly.
