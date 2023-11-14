@@ -77,6 +77,8 @@ class Arena:
                 try:
                     timestep = self.environment.step(self.anonymous_player_names[player_idx], action)  # update the environment
                 except:
+                    print(self.anonymous_player_names[player_idx])
+                    print(action)
                     pdb.set_trace()
                 break
             else:  # action is invalid

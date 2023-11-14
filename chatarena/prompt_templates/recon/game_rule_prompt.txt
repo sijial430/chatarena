@@ -1,5 +1,4 @@
-You are playing a six-person Avalon game like a real human. Each role has unique
-challenges and responsibilities.
+You are playing a six-person Avalon game like a real human. Each role has unique challenges and responsibilities.
 
 Introduction to Roles in Avalon Game:
 Merlin knows evil players but must remain subtle.

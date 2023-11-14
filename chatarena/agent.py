@@ -89,10 +89,91 @@ class Player(Agent):
         Returns:
             str: The action (response) of the player.
         """
+        """
         try:
             response = self.backend.query(agent_name=self.name, role=self.role, role_desc=self.role_desc,
                                           history_messages=observation, global_prompt=self.global_prompt,
                                           request_msg=None)
+        except RetryError as e:
+            err_msg = f"Agent {self.role} failed to generate a response. Error: {e.last_attempt.exception()}. Sending signal to end the conversation."
+            logging.warning(err_msg)
+            response = SIGNAL_END_OF_CONVERSATION + err_msg
+
+        return response
+        """
+        return self.act_recon(observation)
+    
+    def act_multistep(self, observation):
+        try:
+            thought_msg1 = f"What is the state of the game? Make sure your answer touches on the other players' roles, thoughts and plans."
+            thought_msg2 = f"What is your objective in this round? Consider your role, the game state, and your chances of winning the game."
+            thought_msg3 = f"How can you achieve your objective for this round?"
+            thought_msg4 = f"Craft a message to send to the other players. Ensure your responses helps move forward the game according to your objectives. Ensure not to reveal too much in your message."
+            thought_msg5 = f"Now consider your strategy and objective, and revise your message. If your message is too long or says anything about your identity, ensure to fix it."
+
+            thought_msg_list1 = [thought_msg1]
+            response1 = self.backend.query(agent_name=self.name, role=self.role, role_desc=self.role_desc,
+                                          history_messages=observation, global_prompt=self.global_prompt,
+                                          request_msg=None, thought_msgs=thought_msg_list1)
+
+            thought_msg_list2 = [thought_msg1, response1, thought_msg2]
+            response2 = self.backend.query(agent_name=self.name, role=self.role, role_desc=self.role_desc,
+                                          history_messages=observation, global_prompt=self.global_prompt,
+                                          request_msg=None, thought_msgs=thought_msg_list2)
+
+            thought_msg_list3 = [thought_msg1, response1, thought_msg2, response2, thought_msg3]
+            response3 = self.backend.query(agent_name=self.name, role=self.role, role_desc=self.role_desc,
+                                          history_messages=observation, global_prompt=self.global_prompt,
+                                          request_msg=None, thought_msgs=thought_msg_list3)
+
+            thought_msg_list4 = [thought_msg1, response1, thought_msg2, response2, thought_msg3, response3, thought_msg4]
+            response4 = self.backend.query(agent_name=self.name, role=self.role, role_desc=self.role_desc,
+                                          history_messages=observation, global_prompt=self.global_prompt,
+                                          request_msg=None, thought_msgs=thought_msg_list4)
+
+            thought_msg_list5 = [thought_msg1, response1, thought_msg2, response2, thought_msg3, response3, thought_msg4, response4, thought_msg5]
+            response5 = self.backend.query(agent_name=self.name, role=self.role, role_desc=self.role_desc,
+                                          history_messages=observation, global_prompt=self.global_prompt,
+                                          request_msg=None, thought_msgs=thought_msg_list5)
+            print('\n'.join(thought_msg_list5))
+            print(response5)
+            response = response5
+        except RetryError as e:
+            err_msg = f"Agent {self.role} failed to generate a response. Error: {e.last_attempt.exception()}. Sending signal to end the conversation."
+            logging.warning(err_msg)
+            response = SIGNAL_END_OF_CONVERSATION + err_msg
+
+        return response
+
+    def act_recon(self, observation):
+        try:
+            thought_msg1 = f"You're {self.name} with role {self.role}.\nYour task is to: Analyze other players based on game dialogues with roles: Merlin, Percival, Loyal Servant of Arthur, Morgana, Assassin. Morgana and Assassin are evil; others are good. \nConsider: \n1. Quest Outcomes: Take into account the results of past missions to analyze players' roles. \n2. Role List: Remember the possible roles in the game—Merlin, Percival, two Loyal Servants, Morgana, Assassin—and their alignments. \n3. Level of Certainty: Use 'Certain' or 'Unknown' to gauge your confidence in your role guesses for each player. \n4. Players Disclosing Evil Roles: Be cautious around players who have openly claimed or hinted at being evil roles like Morgana or Assassin. \n5. Prior Guesses: Reflect on your earlier estimations of other players' roles (previous attitude to players), but don't rely solely on them."
+            thought_msg2 = f"Respond in two stages: THINK and SPEAK\nIn think, internally strategize using history and consider possible deception.\nIn speak, organize your language based on your contemplation and speak accordingly."
+            thought_msg3 = f"You're {self.name} with role {self.role}.\nYour task is to: \nAnalyze how your original SPEAK content might be interpreted by other game roles. Reflect on whether it may inadvertently reveal your role-specific clues.\nConsider: \n1. The perspectives of each game role, including their probable reactions to your SPEAK content.\n2. Any unique hints or clues in your original SPEAK that might disclose your role."
+            thought_msg4 = f"You're observing {self.name} with role {self.role}.\nYour task is to: \n1. Evaluate if {self.name}'s actions align with {self.role}.\n2. Improve {self.name}'s chances of winning through your previous second perspective transition thought.\n3. Keep role hint in public dialogue.\n1. Target Outcome: Aim to achieve [desired result] as your role dictates in the game.\n2. Role Alignment: Evaluate whether your THINK and SPEAK contents align well with your role {self.role} in the current game state.\n3. Strategy Reevaluation: Consider what changes could be made to your THINK and SPEAK contents to improve your chances of winning as {self.role}.\n4. Public and Private Content: Remember that THINK contents are private, while SPEAK contents are publicly visible. Strategize accordingly."
+
+            thought_msg_list1 = [thought_msg1]
+            response1 = self.backend.query(agent_name=self.name, role=self.role, role_desc=self.role_desc,
+                                          history_messages=observation, global_prompt=self.global_prompt,
+                                          request_msg=None, thought_msgs=thought_msg_list1)
+
+            thought_msg_list2 = [thought_msg1, response1, thought_msg2]
+            response2 = self.backend.query(agent_name=self.name, role=self.role, role_desc=self.role_desc,
+                                          history_messages=observation, global_prompt=self.global_prompt,
+                                          request_msg=None, thought_msgs=thought_msg_list2)
+
+            thought_msg_list3 = [thought_msg1, response1, thought_msg2, response2, thought_msg3]
+            response3 = self.backend.query(agent_name=self.name, role=self.role, role_desc=self.role_desc,
+                                          history_messages=observation, global_prompt=self.global_prompt,
+                                          request_msg=None, thought_msgs=thought_msg_list3)
+
+            thought_msg_list4 = [thought_msg1, response1, thought_msg2, response2, thought_msg3, response3, thought_msg4]
+            response4 = self.backend.query(agent_name=self.name, role=self.role, role_desc=self.role_desc,
+                                          history_messages=observation, global_prompt=self.global_prompt,
+                                          request_msg=None, thought_msgs=thought_msg_list4)
+            print('\n'.join(thought_msg_list4))
+            print(response4)
+            response = response4
         except RetryError as e:
             err_msg = f"Agent {self.role} failed to generate a response. Error: {e.last_attempt.exception()}. Sending signal to end the conversation."
             logging.warning(err_msg)
